@@ -18,15 +18,17 @@ API design is harder than you would think!
 
 # Counter
 
+```javascript
 declare("counter").numberField();
 declare("count").button();
 
 when("count").clicked()
 	.set("counter", () => this.value + 1); // or "counter".set ?
-
+```
 
 # Temperature Converter
 
+```
 declare("celcius").numberField();
 declare("fahrenheit").numberField();
 
@@ -35,11 +37,11 @@ when("fahrenheit").updated()
 
 when("celcius").updated()
 	.set("fahrenheit", (input) => (input * (9/5) + 32));
-
+```
 
 # Flight Booker
 
-
+```
 declare("flight type").selectList("one-way flight", "return flight");
 declare("leave").dateField({errors: {background: red, message: "x"}});
 declare("return").dateField({errors: {background: red, message: "x"}});
@@ -52,7 +54,7 @@ disable("book", "leave".notValid(), "return".notValid());
 
 when("book").clicked()
 	.showMessage(() => `You have booked a {flight type} flight on {leave}`); // TODO: if return also show 'and {return}'
-
+```
 
 Notes
 * Should selectList take an array or just a list of args? Probably should be flexible.
@@ -64,7 +66,7 @@ Notes
 
 # Timer
 
-
+```
 declare("elapsed").progressBar();
 declare("elapsedLabel").label();
 declare("duration").slider();
@@ -79,7 +81,8 @@ when("duration").updated()
 
 when("reset").clicked()
 	.set("elapsed", 0.0);
-	
+```
+
 Notes:
 * "elapsed" when and other whens do not differentiate between user actions and system actions. Kinda like Flux.
 * It kinda cries out for a separate model to contain the "elapsed" state, with both "elapsed" and "elapsedLabel" deriving their values from it. But that's more code to write for the programmer. Maybe we don't need it?
