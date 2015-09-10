@@ -1,6 +1,6 @@
 # 7GUIs API
 
-## This is an attempt to produce an API specification for an imaginary UI framework.
+## An API specification for an imaginary UI framework
 
 Driving the spec are the problems proposed in the [7GUIs project](https://github.com/eugenkiss/7guis/wiki).
 
@@ -22,7 +22,7 @@ declare("counter").numberField();
 declare("count").button();
 
 when("count").clicked()
-	.set("counter", () => this.value + 1);
+	.set("counter", () => this.value + 1); // or "counter".set ?
 
 
 # Temperature Converter
@@ -55,18 +55,31 @@ when("book").clicked()
 
 
 Notes
-Should selectList take an array or just a list of args? Probably should be flexible.
-Grouping is unclear (i.e. what makes up form? are all controls in local module scope?)
-Maybe it should just be local module scope?
-Should we split up styling/layout? Biz logic should be separate
+* Should selectList take an array or just a list of args? Probably should be flexible.
+* Grouping is unclear (i.e. what makes up form? are all controls in local module scope?)
+* Maybe it should just be local module scope?
+* Should we split up styling/layout? Biz logic should be separate
+* What/where exactly is 'showMessage' defined?
 
 
 # Timer
 
 
 declare("elapsed").progressBar();
-declare("durationLabel").label();
+declare("elapsedLabel").label();
 declare("duration").slider();
 declare("reset").button();
 
+startTimer(0.1).tick(() => set("elapsed", (delta) => this.value + delta)); // implies timer passes delta as input.
+when("elapsed").updated()
+	.set("elapsedLabel", (input) => `{input}s`);
 
+when("duration").updated()
+	.set("elapsed").maximum((input) => input);
+
+when("reset").clicked()
+	.set("elapsed", 0.0);
+	
+Notes:
+* "elapsed" when and other whens do not differentiate between user actions and system actions. Kinda like Flux.
+* It kinda cries out for a separate model to contain the "elapsed" state, with both "elapsed" and "elapsedLabel" deriving their values from it. But that's more code to write for the programmer. Maybe we don't need it?
