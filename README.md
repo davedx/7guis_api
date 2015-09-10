@@ -28,7 +28,7 @@ when("count").clicked()
 
 # Temperature Converter
 
-```
+```javascript
 declare("celcius").numberField();
 declare("fahrenheit").numberField();
 
@@ -41,7 +41,7 @@ when("celcius").updated()
 
 # Flight Booker
 
-```
+```javascript
 declare("flight type").selectList("one-way flight", "return flight");
 declare("leave").dateField({errors: {background: red, message: "x"}});
 declare("return").dateField({errors: {background: red, message: "x"}});
@@ -66,7 +66,7 @@ Notes
 
 # Timer
 
-```
+```javascript
 declare("elapsed").progressBar();
 declare("elapsedLabel").label();
 declare("duration").slider();
