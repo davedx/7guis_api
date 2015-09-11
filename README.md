@@ -98,15 +98,32 @@ declare("model").data([
 ]);
 declare("filterLabel").label("Filter prefix:");
 declare("filter").textField();
-declare("items").selectList({model: "model"}).flatList();
+declare("items").selectList({model: "model"}).listBox()
+	.itemView((item) => `{item.surname}, {item.name}`);
 declare("nameLabel").label("Name:");
 declare("surnameLabel").label("Surname:");
 declare("name").textField();
 declare("surname").textField();
+declare("create").button();
+declare("update").button();
+declare("delete").button();
+
+when("filter").updated()
+	.filter("items", (input, item) => item.surname.startsWith(input)); // very tricky. How does function pass input from filter with item from items? API strangeness. It's very concise and quite readable, though.
+
+when("create").clicked()
+	.create("model", {name: get("name"), surname: get("surname")});
+
+when("update").clicked()
+	.update("model", selected); // by key?? how??
+	
+when("delete").clicked()
+	.delete("model", selected); // by key?? how??
 ```
 
 Notes:
 * Data binding. Need to carefully consider if this is the right way to do it.
-* Refine how subtypes of UI components are specified (i.e. .flatList() is crappy)
+* Refine how subtypes of UI components are specified (i.e. .listBox() is crappy)
 * Typing "declare" is getting tiresome. Maybe something more succint like def or decl? Or do away with it entirely somehow? It feels like boilerplate.
- 
+* We are mixing paradigms. Sometimes next step in action is done by chaining, sometimes by a closure. We need to define and separate cleanly when each is used. At the moment, it seems like what would be done by promises (.then) are done with chaining, and what would be callbacks called at unspecified times (e.g. for filtering) are done with closures. Maybe this is sensible but it's a bit opaque too as there is no explicit .then anywhere.
+* Rails would reduce almost everything to 0 code. Maybe our API should support a very minimal schema def and just say "build CRUD form"? 
