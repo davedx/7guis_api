@@ -86,3 +86,27 @@ when("reset").clicked()
 Notes:
 * "elapsed" when and other whens do not differentiate between user actions and system actions. Kinda like Flux.
 * It kinda cries out for a separate model to contain the "elapsed" state, with both "elapsed" and "elapsedLabel" deriving their values from it. But that's more code to write for the programmer. Maybe we don't need it?
+
+
+# CRUD
+
+```javascript
+declare("model").data([
+	{name: "Hans", surname: "Emil"},
+	{name: "Max", surname: "Mustermann"},
+	{name: "Roman", surname: "Tisch"}
+]);
+declare("filterLabel").label("Filter prefix:");
+declare("filter").textField();
+declare("items").selectList({model: "model"}).flatList();
+declare("nameLabel").label("Name:");
+declare("surnameLabel").label("Surname:");
+declare("name").textField();
+declare("surname").textField();
+```
+
+Notes:
+* Data binding. Need to carefully consider if this is the right way to do it.
+* Refine how subtypes of UI components are specified (i.e. .flatList() is crappy)
+* Typing "declare" is getting tiresome. Maybe something more succint like def or decl? Or do away with it entirely somehow? It feels like boilerplate.
+ 
