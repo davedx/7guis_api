@@ -115,10 +115,10 @@ when("create").clicked()
 	.create("model", {name: get("name"), surname: get("surname")});
 
 when("update").clicked()
-	.update("model", selected); // by key?? how??
+	.update("model", {name: get("name"), surname: get("surname")}, get("items").selected());
 	
 when("delete").clicked()
-	.delete("model", selected); // by key?? how??
+	.delete("model", get("items").selected());
 ```
 
 Notes:
@@ -126,4 +126,4 @@ Notes:
 * Refine how subtypes of UI components are specified (i.e. .listBox() is crappy)
 * Typing "declare" is getting tiresome. Maybe something more succint like def or decl? Or do away with it entirely somehow? It feels like boilerplate.
 * We are mixing paradigms. Sometimes next step in action is done by chaining, sometimes by a closure. We need to define and separate cleanly when each is used. At the moment, it seems like what would be done by promises (.then) are done with chaining, and what would be callbacks called at unspecified times (e.g. for filtering) are done with closures. Maybe this is sensible but it's a bit opaque too as there is no explicit .then anywhere.
-* Rails would reduce almost everything to 0 code. Maybe our API should support a very minimal schema def and just say "build CRUD form"? 
+* Create and update are too similar. How can we refactor the API?
