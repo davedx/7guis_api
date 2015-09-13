@@ -127,7 +127,7 @@ Notes:
 
 # General notes and observations
 
-We see three times of statements emerging:
-* Declarations: state what the UI is and the passive rules of its components (e.g. validation)
+We see two types of statements emerging:
+* Declarations: state the components of the app and their passive rules, e.g. validation
 * Time/logic flow: state series of actions that occur when something happens at a point in time. Actually most of these usually concern a specific component. Should they be part of its declaration? (Think how button click handlers are usually encapsulated in an OOP UI framework's class definitions...) Maybe it depends how FP/OOP we want to be.
-* Imperative statements: e.g. starting a timer running. Maybe these should also be declarative?
+* Still lots of get/set boilerplate. Usually should be able to shorthand these like we do with the .filter in CRUD example.
