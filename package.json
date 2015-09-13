@@ -1,0 +1,19 @@
+{
+  "name": "7guis_api",
+  "version": "0.0.1",
+  "description": "## An API specification for an imaginary UI framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davedx/7guis_api.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davedx/7guis_api/issues"
+  },
+  "homepage": "https://github.com/davedx/7guis_api#readme"
+}
