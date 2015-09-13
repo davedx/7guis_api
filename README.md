@@ -102,8 +102,8 @@ declare("items").selectList({model: "model"}).listBox()
 	.itemView((item) => `{item.surname}, {item.name}`);
 declare("nameLabel").label("Name:");
 declare("surnameLabel").label("Surname:");
-declare("name").textField().modelView("model");
-declare("surname").textField().modelView("model");
+declare("name").textField().group("model");
+declare("surname").textField().group("model");
 declare("create").button();
 declare("update").button();
 declare("delete").button();
@@ -112,10 +112,10 @@ when("filter").updated()
 	.filter("items", (input, item) => item.surname.startsWith(input)); // very tricky. How does function pass input from filter with item from items? API strangeness. It's very concise and quite readable, though.
 
 when("create").clicked()
-	.create("model", getView("model"));
+	.create("model", group("model"));
 
 when("update").clicked()
-	.update("model", getView("model"), get("items").selected());
+	.update("model", group("model"), get("items").selected());
 	
 when("delete").clicked()
 	.delete("model", get("items").selected());
@@ -126,4 +126,10 @@ Notes:
 * Refine how subtypes of UI components are specified (i.e. .listBox() is crappy)
 * Typing "declare" is getting tiresome. Maybe something more succint like def or decl? Or do away with it entirely somehow? It feels like boilerplate.
 * We are mixing paradigms. Sometimes next step in action is done by chaining, sometimes by a closure. We need to define and separate cleanly when each is used. At the moment, it seems like what would be done by promises (.then) are done with chaining, and what would be callbacks called at unspecified times (e.g. for filtering) are done with closures. Maybe this is sensible but it's a bit opaque too as there is no explicit .then anywhere.
-* modelView / getView API feels clunky and murky
+
+# General notes and observations
+
+We see three times of statements emerging:
+* Declarations: state what the UI is and the passive rules of its components (e.g. validation)
+* Time/logic flow: state series of actions that occur when something happens at a point in time. Actually most of these usually concern a specific component. Should they be part of its declaration? (Think how button click handlers are usually encapsulated in an OOP UI framework's class definitions...) Maybe it depends how FP/OOP we want to be.
+* Imperative statements: e.g. starting a timer running. Maybe these should also be declarative?
