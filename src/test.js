@@ -1,12 +1,12 @@
-import * as G from "./g";
+import {numberField, button, clicked} from "./g";
 
 //FIXME: hide bootstrapping
 function run() {
-	G.numberField("counter");
-	G.button("count"); //TODO
+	numberField("counter", 0);
+	button("count", "Click me");
 
-	G.clicked("count") //TODO
-    .set("counter", () => this.value + 1);
+	clicked("count")
+    .set("counter", (input) => input + 1);
 }
 
 window.run = run;
