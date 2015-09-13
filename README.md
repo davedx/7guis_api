@@ -16,116 +16,114 @@ Maybe if the spec is ever finished, I will attempt to build the framework. For n
 
 API design is harder than you would think!
 
+## Branch: Promise
+
+This branch assumes every . in a chain is an implicit promise .then. In other words, a . indicates *action* chaining.
+
 # Counter
 
 ```javascript
-declare("counter").numberField();
-declare("count").button();
+numberField("counter");
+button("count");
 
-when("count").clicked()
-	.set("counter", () => this.value + 1); // or "counter".set ?
+clicked("count")
+	.set("counter", () => this.value + 1);
 ```
 
 # Temperature Converter
 
 ```javascript
-declare("celcius").numberField();
-declare("fahrenheit").numberField();
+numberField("celcius");
+numberField("fahrenheit");
 
-when("fahrenheit").updated()
+updated("fahrenheit")
 	.set("celcius", (input) => (input - 32) * (5/9));
 
-when("celcius").updated()
+updated("celcius")
 	.set("fahrenheit", (input) => (input * (9/5) + 32));
 ```
 
 # Flight Booker
 
 ```javascript
-declare("flight type").selectList("one-way flight", "return flight");
-declare("leave").dateField({errors: {background: red, message: "x"}}).group("form");
-declare("return").dateField({errors: {background: red, message: "x"}}).group("form");
-declare("book").button();
+selectList("flight type", ["one-way flight", "return flight"]);
+dateField("leave", {errors: {background: red, message: "x"}, group: "form"},
+	{validate: {before: "return"}});
+dateField("return", {errors: {background: red, message: "x"}, group: "form"});
+submitButton("book", {group: "form"});
 
-validate("leave").before("return"); // maybe chain on declare instead?
+changed("flight type")
+	.disable("return", () => this.selected === "one-way flight");
 
-disable("return", get("flight type").selected("one-way flight"));
-disable("book", group("form").notValid());
-
-when("book").clicked()
+clicked("book")
 	.showMessage(() => `You have booked a {flight type} flight on {leave}`); // TODO: if return also show 'and {return}'
 ```
 
 Notes
-* Should selectList take an array or just a list of args? Probably should be flexible.
-* Maybe it should just be local module scope?
-* Should we split up styling/layout? Biz logic should be separate
 * What/where exactly is 'showMessage' defined?
-* Maybe buttons should be able to be "submitButtons" also, that are automatically disabled if their form group fails validation?
+* Buttons can be "submitButtons", then they are automatically disabled if their form group fails validation
+* Any chained action can have an optional condition callback, as in the changed ("flight type").disable() action
 
 
 # Timer
 
 ```javascript
-declare("elapsed").progressBar();
-declare("elapsedLabel").label();
-declare("duration").slider();
-declare("reset").button();
+progressBar("elapsed");
+label("elapsedLabel");
+slider("duration");
+button("reset");
+metronome(0.1).tick(() => set("elapsed", (delta) => this.value + delta));
 
-startTimer(0.1).tick(() => set("elapsed", (delta) => this.value + delta)); // implies timer passes delta as input.
-when("elapsed").updated()
+updated("elapsed")
 	.set("elapsedLabel", (input) => `{input}s`);
 
-when("duration").updated()
-	.set("elapsed").maximum((input) => input);
+updated("duration")
+	.set("elapsed", maximum((input) => input)); // FIXME: this is not readable.
 
-when("reset").clicked()
+clicked("reset")
 	.set("elapsed", 0.0);
 ```
 
 Notes:
-* "elapsed" when and other whens do not differentiate between user actions and system actions. Kinda like Flux.
-* It kinda cries out for a separate model to contain the "elapsed" state, with both "elapsed" and "elapsedLabel" deriving their values from it. But that's more code to write for the programmer. Maybe we don't need it?
-
+* "elapsed" when and other whens do not differentiate between user actions and system actions
 
 # CRUD
 
 ```javascript
-declare("model").data([
+model("names", [
 	{name: "Hans", surname: "Emil"},
 	{name: "Max", surname: "Mustermann"},
 	{name: "Roman", surname: "Tisch"}
 ]);
-declare("filterLabel").label("Filter prefix:");
-declare("filter").textField();
-declare("items").selectList({model: "model"}).listBox()
-	.itemView((item) => `{item.surname}, {item.name}`);
-declare("nameLabel").label("Name:");
-declare("surnameLabel").label("Surname:");
-declare("name").textField().group("model");
-declare("surname").textField().group("model");
-declare("create").button();
-declare("update").button();
-declare("delete").button();
+label("filterLabel", "Filter prefix:");
+textField("filter");
+listBox("items", {model: "names", itemView: (item) => `{item.surname}, {item.name}`});
+label("nameLabel", "Name:");
+label("surnameLabel", "Surname:");
+textField("name", {group: "form"});
+textField("surname" {group: "form"});
+button("create");
+button("update");
+button("delete");
 
-when("filter").updated()
+updated("filter")
 	.filter("items", (input, item) => item.surname.startsWith(input)); // very tricky. How does function pass input from filter with item from items? API strangeness. It's very concise and quite readable, though.
 
-when("create").clicked()
-	.create("model", group("model"));
+clicked("create")
+	.create("names", group("form"));
 
-when("update").clicked()
-	.update("model", group("model"), get("items").selected());
+clicked("update")
+	.update("names", group("form"), get("items").selected());
 	
-when("delete").clicked()
-	.delete("model", get("items").selected());
+clicked("delete")
+	.delete("names", get("items").selected());
 ```
 
 Notes:
 * Data binding. Need to carefully consider if this is the right way to do it.
-* Refine how subtypes of UI components are specified (i.e. .listBox() is crappy)
-* Typing "declare" is getting tiresome. Maybe something more succint like def or decl? Or do away with it entirely somehow? It feels like boilerplate.
-* We are mixing paradigms. Sometimes next step in action is done by chaining, sometimes by a closure. We need to define and separate cleanly when each is used. At the moment, it seems like what would be done by promises (.then) are done with chaining, and what would be callbacks called at unspecified times (e.g. for filtering) are done with closures. Maybe this is sensible but it's a bit opaque too as there is no explicit .then anywhere.
+* items listBox now has its custom itemView declared as closure inside a JS object. Is this OK?
+* filter is shorthand for get("").filter?
+* Maybe also OK to have e.g. selected("items") for get("items").selected() then?
 
 # General notes and observations
 
