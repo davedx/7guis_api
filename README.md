@@ -43,14 +43,14 @@ when("celcius").updated()
 
 ```javascript
 declare("flight type").selectList("one-way flight", "return flight");
-declare("leave").dateField({errors: {background: red, message: "x"}});
-declare("return").dateField({errors: {background: red, message: "x"}});
+declare("leave").dateField({errors: {background: red, message: "x"}}).group("form");
+declare("return").dateField({errors: {background: red, message: "x"}}).group("form");
 declare("book").button();
 
 validate("leave").before("return"); // maybe chain on declare instead?
 
-disable("return", "flight type".selected("one-way flight"));
-disable("book", "leave".notValid(), "return".notValid());
+disable("return", get("flight type").selected("one-way flight"));
+disable("book", group("form").notValid());
 
 when("book").clicked()
 	.showMessage(() => `You have booked a {flight type} flight on {leave}`); // TODO: if return also show 'and {return}'
@@ -58,10 +58,10 @@ when("book").clicked()
 
 Notes
 * Should selectList take an array or just a list of args? Probably should be flexible.
-* Grouping is unclear (i.e. what makes up form? are all controls in local module scope?)
 * Maybe it should just be local module scope?
 * Should we split up styling/layout? Biz logic should be separate
 * What/where exactly is 'showMessage' defined?
+* Maybe buttons should be able to be "submitButtons" also, that are automatically disabled if their form group fails validation?
 
 
 # Timer
