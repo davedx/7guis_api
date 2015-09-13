@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/davedx/7guis_api/issues"
   },
-  "homepage": "https://github.com/davedx/7guis_api#readme"
+  "homepage": "https://github.com/davedx/7guis_api#readme",
+  "dependencies": {
+    "eventemitter3": "^1.1.1"
+  }
 }
