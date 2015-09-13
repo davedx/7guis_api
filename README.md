@@ -72,7 +72,10 @@ progressBar("elapsed");
 label("elapsedLabel");
 slider("duration");
 button("reset");
-metronome(0.1).tick(() => set("elapsed", (delta) => this.value + delta));
+metronome("timer", 0.1)
+
+ticked("timer")
+	.set("elapsed", (delta) => this.value + delta));
 
 updated("elapsed")
 	.set("elapsedLabel", (input) => `{input}s`);
@@ -131,3 +134,10 @@ We see two types of statements emerging:
 * Declarations: state the components of the app and their passive rules, e.g. validation
 * Time/logic flow: state series of actions that occur when something happens at a point in time. Actually most of these usually concern a specific component. Should they be part of its declaration? (Think how button click handlers are usually encapsulated in an OOP UI framework's class definitions...) Maybe it depends how FP/OOP we want to be.
 * Still lots of get/set boilerplate. Usually should be able to shorthand these like we do with the .filter in CRUD example.
+
+## Index
+
+* Declarations: textField, numberField, dateField, label, button, submitButton, selectList, listBox, progressBar, slider, metronome
+* Event handlers: updated, clicked, changed, ticked
+* Actions: set, disable, showMessage, filter, create, update, delete
+* Readers: get, group, selected, maximum
