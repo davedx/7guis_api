@@ -84,3 +84,11 @@ export function clicked(id) {
 	});
 	return _actions;
 }
+
+export function app(id, appdef) {
+	//TODO: use something that fires when DOM loaded, x-browser
+	window.onload = () => {
+		appdef();
+	};
+}
+

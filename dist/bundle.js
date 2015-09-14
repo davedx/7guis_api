@@ -48,18 +48,14 @@
 	
 	var _framework = __webpack_require__(1);
 	
-	//FIXME: hide bootstrapping
-	//TODO: lifecycle (mount/unmount to prevent memory leaks)
-	function run() {
+	(0, _framework.app)("body", function () {
 		(0, _framework.numberField)("counter", 0);
 		(0, _framework.button)("count", "Click me");
 	
 		(0, _framework.clicked)("count").set("counter", function (input) {
 			return input + 1;
 		});
-	}
-	
-	window.run = run;
+	});
 
 /***/ },
 /* 1 */
@@ -70,10 +66,11 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.textLabel = textLabel;
+	exports.textField = textField;
 	exports.numberField = numberField;
 	exports.button = button;
 	exports.clicked = clicked;
+	exports.app = app;
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
@@ -83,11 +80,11 @@
 	
 	var emitter = new _eventemitter32["default"]();
 	
-	var controls = {};
+	var controls = {}; // Necessary?
 	
 	var typesMap = {
-		textLabel: { element: "input" },
-		numberField: { element: "input", attributes: { type: "number" } },
+		textField: { element: "input", "default": "" },
+		numberField: { element: "input", attributes: { type: "number" }, "default": 0 },
 		button: { element: "button" }
 	};
 	
@@ -133,9 +130,10 @@
 		var input = document.createElement(typeProps.element);
 		input.id = opts.id;
 		if (opts.type === "button") {
-			input.innerHTML = opts.value;
+			input.innerHTML = opts.value || "";
 		} else {
-			input.value = opts.value;
+			// TODO: type checking of opts.value
+			input.value = opts.value || typeProps["default"];
 		}
 		for (var attrKey in typeProps.attributes) {
 			input.attributes[attrKey] = typeProps.attributes[attrKey];
@@ -145,19 +143,21 @@
 		};
 	
 		controls[opts.id] = input;
-		document.getElementById("container").appendChild(input);
+		//TODO: use lifecycle to specify where to mount to in the DOM
+		document.querySelector("body").appendChild(input);
+		return input;
 	}
 	
-	function textLabel(id, value) {
-		makeControl({ type: "textLabel", id: id, value: value });
+	function textField(id, value) {
+		return makeControl({ type: "textField", id: id, value: value });
 	}
 	
 	function numberField(id, value) {
-		makeControl({ type: "numberField", id: id, value: value });
+		return makeControl({ type: "numberField", id: id, value: value });
 	}
 	
 	function button(id, value) {
-		makeControl({ type: "button", id: id, value: value });
+		return makeControl({ type: "button", id: id, value: value });
 	}
 	
 	function clicked(id) {
@@ -167,6 +167,13 @@
 			_actions.target();
 		});
 		return _actions;
+	}
+	
+	function app(id, appdef) {
+		//TODO: use something that fires when DOM loaded, x-browser
+		window.onload = function () {
+			appdef();
+		};
 	}
 
 /***/ },
