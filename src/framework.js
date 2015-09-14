@@ -2,11 +2,11 @@ import EE from "eventemitter3";
 
 let emitter = new EE();
 
-let controls = {};
+let controls = {}; // Necessary?
 
 const typesMap = {
-	textLabel: {element: "input"},
-	numberField: {element: "input", attributes: {type: "number"}},
+	textField: {element: "input", default: ""},
+	numberField: {element: "input", attributes: {type: "number"}, default: 0},
 	button: {element: "button"}
 };
 
@@ -48,9 +48,10 @@ function makeControl(opts) {
 	let input = document.createElement(typeProps.element);
 	input.id = opts.id;
 	if(opts.type === "button") {
-		input.innerHTML = opts.value;
+		input.innerHTML = opts.value || "";
 	} else {
-		input.value = opts.value;
+		// TODO: type checking of opts.value
+		input.value = opts.value || typeProps.default;
 	}
 	for(let attrKey in typeProps.attributes) {
 		input.attributes[attrKey] = typeProps.attributes[attrKey];
@@ -58,12 +59,13 @@ function makeControl(opts) {
 	input.onclick = function() { emitter.emit("clicked", opts.id); };
 
 	controls[opts.id] = input;
-	document.getElementById("container").appendChild(input);
+	//TODO: use lifecycle to specify where to mount to in the DOM
+	document.querySelector("body").appendChild(input);
 	return input;
 }
 
-export function textLabel(id, value) {
-	return makeControl({type: "textLabel", id: id, value: value});
+export function textField(id, value) {
+	return makeControl({type: "textField", id: id, value: value});
 }
 
 export function numberField(id, value) {

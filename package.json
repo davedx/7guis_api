@@ -26,8 +26,10 @@
     "babel-loader": "^5.3.2",
     "babel-runtime": "^5.8.24",
     "expect": "^1.10.0",
+    "jsdom": "^6.4.0",
     "mocha": "^2.3.2",
     "mocha-babel": "^3.0.0",
+    "mocha-jsdom": "^1.0.0",
     "webpack": "^1.12.1"
   }
 }
