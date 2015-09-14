@@ -120,6 +120,24 @@ Notes:
 * filter is shorthand for get("").filter?
 * Maybe also OK to have e.g. selected("items") for get("items").selected() then?
 
+# Circle Drawer
+
+```javascript
+canvas("page");
+contextMenu("circleMenu", () => {
+	label("menuLabel", "Adjust diameter of circle at (x, y)"); //TODO: x,y
+	slider("menuSlider");
+});
+
+clicked("page", Mouse.LeftButton)
+	.create("circle", input.position);
+clicked("circle", Mouse.RightButton)
+	.showContextMenu("circleMenu", input);
+```
+
+Notes:
+
+
 # General notes and observations
 
 We see two types of statements emerging:
