@@ -1,0 +1,33 @@
+{
+  "name": "7guis_api",
+  "version": "0.0.1",
+  "description": "## An API specification for an imaginary UI framework",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --watch",
+    "test": "mocha --compilers js:mocha-babel test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davedx/7guis_api.git"
+  },
+  "author": "Dave Clayton <davedx@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davedx/7guis_api/issues"
+  },
+  "homepage": "https://github.com/davedx/7guis_api#readme",
+  "dependencies": {
+    "eventemitter3": "^1.1.1"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.24",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.24",
+    "expect": "^1.10.0",
+    "mocha": "^2.3.2",
+    "mocha-babel": "^3.0.0",
+    "webpack": "^1.12.1"
+  }
+}
