@@ -46,14 +46,15 @@
 
 	"use strict";
 	
-	var _g = __webpack_require__(1);
+	var _framework = __webpack_require__(1);
 	
 	//FIXME: hide bootstrapping
+	//TODO: lifecycle (mount/unmount to prevent memory leaks)
 	function run() {
-		(0, _g.numberField)("counter", 0);
-		(0, _g.button)("count", "Click me");
+		(0, _framework.numberField)("counter", 0);
+		(0, _framework.button)("count", "Click me");
 	
-		(0, _g.clicked)("count").set("counter", function (input) {
+		(0, _framework.clicked)("count").set("counter", function (input) {
 			return input + 1;
 		});
 	}

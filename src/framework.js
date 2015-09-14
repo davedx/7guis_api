@@ -59,18 +59,19 @@ function makeControl(opts) {
 
 	controls[opts.id] = input;
 	document.getElementById("container").appendChild(input);
+	return input;
 }
 
 export function textLabel(id, value) {
-	makeControl({type: "textLabel", id: id, value: value});
+	return makeControl({type: "textLabel", id: id, value: value});
 }
 
 export function numberField(id, value) {
-	makeControl({type: "numberField", id: id, value: value});
+	return makeControl({type: "numberField", id: id, value: value});
 }
 
 export function button(id, value) {
-	makeControl({type: "button", id: id, value: value});
+	return makeControl({type: "button", id: id, value: value});
 }
 
 export function clicked(id) {

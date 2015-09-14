@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './src/test.js',
+    entry: './src/7gui.js',
     output: {
         path: __dirname,
         filename: 'dist/bundle.js'
