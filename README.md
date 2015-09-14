@@ -12,15 +12,7 @@ This document will attempt to specify an API for a framework that would solve th
 
 The core language will be ES6 as that's what I know the best (although I believe Ruby is a very strong choice for many of the problems encountered).
 
-Maybe if the spec is ever finished, I will attempt to build the framework. For now it's a thought experiment.
-
-API design is harder than you would think!
-
-## Branch: Promise
-
-This branch assumes every . in a chain is an implicit promise .then. In other words, a . indicates *action* chaining.
-
-# Counter
+# Counter (implemented)
 
 ```javascript
 numberField("counter");
@@ -134,6 +126,7 @@ We see two types of statements emerging:
 * Declarations: state the components of the app and their passive rules, e.g. validation
 * Time/logic flow: state series of actions that occur when something happens at a point in time. Actually most of these usually concern a specific component. Should they be part of its declaration? (Think how button click handlers are usually encapsulated in an OOP UI framework's class definitions...) Maybe it depends how FP/OOP we want to be.
 * Still lots of get/set boilerplate. Usually should be able to shorthand these like we do with the .filter in CRUD example.
+* Every . in a chain is an implicit promise .then. In other words, a . indicates *action* chaining.
 
 ## Index
 
