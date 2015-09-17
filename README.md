@@ -124,8 +124,8 @@ Notes:
 
 ```javascript
 canvas("page");
-contextMenu("circleMenu", () => {
-	label("menuLabel", "Adjust diameter of circle at (x, y)"); //TODO: x,y
+contextMenu("circleMenu", (target) => {
+	label("menuLabel", `Adjust diameter of circle at ({target.x}, {target.y})`);
 	slider("menuSlider");
 });
 
@@ -133,10 +133,20 @@ clicked("page", Mouse.LeftButton)
 	.create("circle", input.position);
 clicked("circle", Mouse.RightButton)
 	.showContextMenu("circleMenu", input);
+updated("menuSlider")
+	.update((input, contextMenu) => contextMenu.target.diameter = input.value); // hmmm.
+undo("page")
+	.undoLastAction();
+redo("page")
+	.redoLastUndoneAction();
 ```
 
 Notes:
-
+* How does .create("circle") work? Think we need to define a circle primitive, or at least declare what it is
+* Where does input inside .create come from? Should this code be in a closure?
+* Likewise with input inside .showContextMenu. It's supposed to be the clicked circle but that's not explicit
+* The .update in updated("menuSlider") needs refinement. .update's signature normally takes an explicit ID. The closure here is nice, but why is contextMenu the 2nd parameter? Maybe 2nd parameter is always the control's parent? Maybe named parameters would be clearer.
+* Undo/redo is not explicit enough. Where is an 'action' defined/declared? (For this example, an action is: creating a circle; the last set value of the diameter of a circle when context menu is closed.
 
 # General notes and observations
 
@@ -145,6 +155,7 @@ We see two types of statements emerging:
 * Time/logic flow: state series of actions that occur when something happens at a point in time. Actually most of these usually concern a specific component. Should they be part of its declaration? (Think how button click handlers are usually encapsulated in an OOP UI framework's class definitions...) Maybe it depends how FP/OOP we want to be.
 * Still lots of get/set boilerplate. Usually should be able to shorthand these like we do with the .filter in CRUD example.
 * Every . in a chain is an implicit promise .then. In other words, a . indicates *action* chaining.
+* We need an automatic user action undo/redo stack. Actions themselves need to be declared explicitly, or all actions will be undone. (See Circles example)
 
 ## Index
 
